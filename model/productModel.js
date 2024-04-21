@@ -2,13 +2,26 @@ import mongoose from "mongoose";
 
 export const productSchema = mongoose.Schema(
   {
-    cateroyId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "categories",
+    category: {
+      id:{
+        type: String,
+        required: [true, "Please add the categoryId"],
+      },
+      title:{
+        type: String,
+        required: [true, "Please add the categoryTitle"],
+      }
+     
     },
-    stepId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "steps",
+    step: {
+      id:{
+        type: String,
+        required: [true, "Please add the step"],
+      },
+      title:{
+        type: String,
+        required: [true, "Please add the stepTitle"],
+      }
     },
     name: {
       type: String,

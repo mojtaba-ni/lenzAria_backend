@@ -32,8 +32,8 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     Specifications,
     price,
     image,
-    stepId,
-    categoryId,
+    step,
+    category,
   } = req.body;
   if (
     !name ||
@@ -41,29 +41,18 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     !Specifications ||
     !price ||
     !image ||
-    !stepId ||
-    !categoryId
+    !step ||
+    !category
   ) {
     res.status(400);
     throw new errorHandler("Please fill out all");
   }
-  const findCategory = await categoryModel.findOne({ _id: categoryId });
-  const categorySteps = findCategory.step;
-  const theStep = categorySteps.filter((item) => item._id == "662371d692386afba8968d28");
-  console.log({categorySteps});
-  console.log({theStep});
-  theStep?.product?.push({
-    categoryId,
-    stepId,
-    name,
-    description,
-    Specifications,
-    price,
-    image,
-  })
-  await categoryModel.save()
-  updateCategory = await categoryModel.updateOne({ _id: categoryId });
-  // const product = await productModel.create({
+  // const findCategory = await categoryModel.findOne({ _id: categoryId });
+  // const categorySteps = findCategory.step;
+  // const theStep = categorySteps.filter((item) => item._id == "662371d692386afba8968d28");
+  // console.log({categorySteps});
+  // console.log({theStep});
+  // theStep?.product?.push({
   //   categoryId,
   //   stepId,
   //   name,
@@ -71,9 +60,20 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
   //   Specifications,
   //   price,
   //   image,
-  // });
+  // })
+  // await categoryModel.save()
+  // updateCategory = await categoryModel.updateOne({ _id: categoryId });
+  const product = await productModel.create({
+    category,
+    step,
+    name,
+    description,
+    Specifications,
+    price,
+    image,
+  });
   // console.log({product});
-  res.status(200).json(SuccesResponse(theStep));
+  res.status(200).json(SuccesResponse(product));
 });
 
 //@ desc deleteProduct
@@ -100,7 +100,16 @@ export const deleteProduct = expressAsyncHandler(async (req, res) => {
 //@ route UPDATE api/blog/update
 //@ access public
 export const updateProduct = expressAsyncHandler(async (req, res) => {
-  const { productId } = req.body;
+  const {
+    productId,
+    category,
+    step,
+    name,
+    description,
+    Specifications,
+    price,
+    image,
+  } = req.body;
   const findProduct = await productModel.findOne({ _id: productId });
   if (!productId) {
     res.status(400);
@@ -110,7 +119,10 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
     res.status(404);
     throw new errorHandler("product not exist or its already removed");
   }
-  await productModel.updateOne({ _id: productId });
+  await productModel.updateOne(
+    { _id: productId },
+    { category, step, name, description, Specifications, price, image }
+  );
   res.status(200).send(SuccesResponse());
   return;
 });

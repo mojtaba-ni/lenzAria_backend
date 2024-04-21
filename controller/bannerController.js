@@ -3,6 +3,7 @@ import errorHandler from "../middleware/errorHandler.js";
 import { SuccesResponse } from "../config/response.js";
 import mainBannerModel from "../model/mainBannerModel.js";
 import offerBannerModel from "../model/offerBannerModel.js";
+import modelBanner from "../model/modelBanner.js";
 
 //@ desc getAllMainBanner
 //@ route GET api/mainBanner/all
@@ -23,6 +24,17 @@ export const getAllMainBanner = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const getAllOfferBanner = expressAsyncHandler(async (req, res) => {
   const banners = await offerBannerModel.find();
+
+  if (!banners) {
+    res.status(400).send([]);
+    throw new errorHandler("There are no users");
+  }
+
+  res.status(200).send(SuccesResponse(banners));
+});
+
+export const getAllModelBanner = expressAsyncHandler(async (req, res) => {
+  const banners = await modelBanner.find();
 
   if (!banners) {
     res.status(400).send([]);
@@ -97,7 +109,6 @@ export const addOfferBanner = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const deleteOfferBanner = expressAsyncHandler(async (req, res) => {
   const { bannerId } = req.body;
-  console.log(req.body);
   const findBrand = await offerBannerModel.findOne({ _id: bannerId });
   if (!bannerId) {
     res.status(400);
@@ -108,6 +119,39 @@ export const deleteOfferBanner = expressAsyncHandler(async (req, res) => {
     throw new errorHandler("blog not exist or its already removed");
   }
   await offerBannerModel.deleteOne({ _id: bannerId });
+  res.status(200).send(SuccesResponse());
+  return;
+});
+
+export const addModelBanner = expressAsyncHandler(async (req, res) => {
+  const { image } = req.body;
+  if (!image) {
+    res.status(400);
+    throw new errorHandler("Please fill image");
+  }
+  const checkBanner = await modelBanner.findOne({ image });
+  if (checkBanner) {
+    res.status(400);
+    throw new errorHandler("its already exist");
+  }
+  await modelBanner.create({
+    image,
+  });
+  res.status(200).json(SuccesResponse());
+});
+
+export const deleteModelBanner = expressAsyncHandler(async (req, res) => {
+  const { bannerId } = req.body;
+  const findBrand = await modelBanner.findOne({ _id: bannerId });
+  if (!bannerId) {
+    res.status(400);
+    throw new errorHandler("Please fill out blogId");
+  }
+  if (!findBrand) {
+    res.status(404);
+    throw new errorHandler("blog not exist or its already removed");
+  }
+  await modelBanner.deleteOne({ _id: bannerId });
   res.status(200).send(SuccesResponse());
   return;
 });
