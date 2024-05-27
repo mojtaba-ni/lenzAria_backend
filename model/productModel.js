@@ -2,6 +2,17 @@ import mongoose from "mongoose";
 
 export const productSchema = mongoose.Schema(
   {
+    group: {
+      id:{
+        type: String,
+        required: [true, "Please add the groupId"],
+      },
+      title:{
+        type: String,
+        required: [true, "Please add the groupTitle"],
+      }
+     
+    },
     category: {
       id:{
         type: String,
@@ -23,9 +34,27 @@ export const productSchema = mongoose.Schema(
         required: [true, "Please add the stepTitle"],
       }
     },
+    brand:{
+      id:{
+        type: String,
+        required: [true, "Please add the id"],
+      },
+      title:{
+        type: String,
+        required: [true, "Please add the title"],
+      }
+    },
     name: {
       type: String,
       required: [true, "Please add the UserName"],
+    },
+    period: {
+      type: String,
+      required: [true, "Please add the period"],
+    },
+    periodId: {
+      type: Number,
+      required: [true, "Please add the periodId"],
     },
     description: {
       type: String,

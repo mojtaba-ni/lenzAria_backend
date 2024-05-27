@@ -34,6 +34,10 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     image,
     step,
     category,
+    brand,
+    period,
+    periodId,
+    group
   } = req.body;
   if (
     !name ||
@@ -42,7 +46,11 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     !price ||
     !image ||
     !step ||
-    !category
+    !category ||
+    !brand ||
+    !period ||
+    !periodId ||
+    !group
   ) {
     res.status(400);
     throw new errorHandler("Please fill out all");
@@ -66,11 +74,15 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
   const product = await productModel.create({
     category,
     step,
+    group,
     name,
     description,
     Specifications,
     price,
     image,
+    brand,
+    period,
+    periodId,
   });
   // console.log({product});
   res.status(200).json(SuccesResponse(product));
@@ -109,6 +121,9 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
     Specifications,
     price,
     image,
+    period,
+    periodId,
+    brand,
   } = req.body;
   const findProduct = await productModel.findOne({ _id: productId });
   if (!productId) {
@@ -121,8 +136,66 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
   }
   await productModel.updateOne(
     { _id: productId },
-    { category, step, name, description, Specifications, price, image }
+    {
+      category,
+      step,
+      name,
+      description,
+      Specifications,
+      price,
+      image,
+      period,
+      periodId,
+      brand,
+    }
   );
   res.status(200).send(SuccesResponse());
   return;
+});
+
+//@ desc getNewProduct
+//@ route GET api/product/getNewProduct
+//@ access public
+export const getNewProduct = expressAsyncHandler(async (req, res) => {
+  const product = await productModel.find();
+  const newProduct  = []
+for (let index = product?.length - 5; index < product?.length; index++) {
+  const element = product[index];
+  newProduct.push(element)
+}
+  
+  res.status(200).json(SuccesResponse(newProduct));
+});
+
+//@ desc getProductByBrandId
+//@ route GET api/product/getProductByBrandId
+//@ access public
+export const getProductByBrandId = expressAsyncHandler(async (req, res) => {
+  const { brandId} = req.query;
+  console.log({brandId});
+  const product = await productModel.find({ "brand.id": brandId });
+  res.status(200).json(SuccesResponse(product));
+});
+
+//@ desc getProductByPeriodId
+//@ route GET api/product/getProductByPeriodId
+//@ access public
+export const getProductByPeriodId = expressAsyncHandler(async (req, res) => {
+  const { periodId} = req.query;
+  console.log({periodId});
+  const product = await productModel.find({ periodId: periodId });
+  res.status(200).json(SuccesResponse(product));
+});
+
+
+//@ desc getProductBySearch
+//@ route GET api/product/search
+//@ access public
+export const getProductBySearch = expressAsyncHandler(async (req, res) => {
+  const { name} = req.query;
+  console.log({name});
+  const product = await productModel.find();
+  const SearchPr = product.some(name)
+  console.log({SearchPr});
+  res.status(200).json(SuccesResponse(product));
 });
