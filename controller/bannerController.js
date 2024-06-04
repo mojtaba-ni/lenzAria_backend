@@ -69,7 +69,6 @@ export const addMainBanner = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const deleteMainBanner = expressAsyncHandler(async (req, res) => {
   const { bannerId } = req.body;
-  console.log(req.body);
   const findBrand = await mainBannerModel.findOne({ _id: bannerId });
   if (!bannerId) {
     res.status(400);

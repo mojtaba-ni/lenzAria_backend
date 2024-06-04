@@ -2,7 +2,7 @@ import expressAsyncHandler from "express-async-handler";
 import errorHandler from "../middleware/errorHandler.js";
 import { SuccesResponse } from "../config/response.js";
 import categoryModel from "../model/categoryModel.js";
-import stepModel from "../model/stepModel.js";
+
 
 //@ desc getAllCategory
 //@ route POST api/category/getAllCategory
@@ -25,8 +25,8 @@ export const getCategoryById = expressAsyncHandler(async (req, res) => {
 //@ route POST api/category/add
 //@ access public
 export const addCategory = expressAsyncHandler(async (req, res) => {
-  const { title, step } = req.body;
-  if (!title || !step) {
+  const { title, step , group} = req.body;
+  if (!title || !step || !group) {
     res.status(400);
     throw new errorHandler("Please fill out all");
   }
@@ -45,6 +45,7 @@ export const addCategory = expressAsyncHandler(async (req, res) => {
   await categoryModel.create({
     title,
     step,
+    group
   });
   res.status(200).json(SuccesResponse());
 });
@@ -75,9 +76,7 @@ export const deleteCategory = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const updateCategory = expressAsyncHandler(async (req, res) => {
   
-  const { title, step , categoryId } = req.body;
-  console.log({categoryId});
-  console.log({title});
+  const { title, step ,group, categoryId } = req.body;
   const findCategory= await categoryModel.findOne({ _id: categoryId });
   if (!categoryId) {
     res.status(400);
@@ -87,7 +86,7 @@ export const updateCategory = expressAsyncHandler(async (req, res) => {
     res.status(404);
     throw new errorHandler("product not exist or its already removed");
   }
-  const newdata = await categoryModel.updateOne({ _id: categoryId } , { title , step});
+  const newdata = await categoryModel.updateOne({ _id: categoryId } , { title , step ,group});
   res.status(200).send(SuccesResponse(newdata));
   return;
 });

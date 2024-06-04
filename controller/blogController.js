@@ -24,13 +24,12 @@ export const getBlogById = expressAsyncHandler(async (req, res) => {
 //@ route POST api/blog/add
 //@ access public
 export const addBlog = expressAsyncHandler(async (req, res) => {
-  const { userId, blogTitle, introduction, detail } = req.body;
-  if (!userId || !blogTitle || !introduction || !detail) {
+  const { blogTitle, introduction, detail } = req.body;
+  if (!blogTitle || !introduction || !detail) {
     res.status(400);
     throw new errorHandler("Please fill out all");
   }
   const blog = await blogModel.create({
-    userId,
     blogTitle,
     introduction,
     detail,
@@ -43,7 +42,7 @@ export const addBlog = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const deleteBlog = expressAsyncHandler(async (req, res) => {
   const { blogId } = req.body;
-  console.log(req.body);
+
   const findBlog = await blogModel.findOne({ _id: blogId });
   if (!blogId) {
     res.status(400);
