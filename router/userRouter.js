@@ -7,5 +7,5 @@ export const usersRoutes = express.Router();
 
 
 usersRoutes.get("/getAllUsers" , getAllUsers)
-usersRoutes.post("/eye/upload/:userId" , uploadEye)
+usersRoutes.post("/eye/upload" , uploadEye)
 // userRoutes.get("/:id" , getAllUser)

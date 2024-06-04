@@ -32,11 +32,12 @@ export const fileTypeChecker = (file) => {
             break
         case '000001ba':
         case '000001b3':
-        case '6674797069736f6d':
-        case '667479704d534e56':
+        case '66747970':
         case '464c56':
         case '1a45dfa3':
+        case '00020':    
             type = fileTypes.VIDEO
+            break;
         default:
             type = fileTypes.UNKNOWN // Or you can use the blob.type as fallback
             break    

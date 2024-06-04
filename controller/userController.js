@@ -23,20 +23,13 @@ export const getAllUsers = expressAsyncHandler(async (req, res) => {
 })
 
 export const uploadEye = expressAsyncHandler(async (req, res) => {
-    const { userId } = req.params;
     const { uploadedFile, filename, lenzFile, lenzFilename } = req.body;
-
-    const user = await userModel.findOne({ _id: userId });
-    if (!user) {
-        res.status(404).send([])
-        throw new errorHandler("User is not found");
-    }
 
     // upload file
     const uploadedFileBuffer = Buffer.from(uploadedFile, 'base64');
     const uploadedFileType = fileTypeChecker(uploadedFileBuffer);
 
-    const newFilename = `${userId}-${Date.now()}-${filename}`;
+    const newFilename = `${Date.now()}-${filename}`;
     const rootDir = process.cwd(); // Root directory of the project
     const uploadsDir = join(rootDir, 'uploads');
     const filePath = join(uploadsDir, newFilename);
@@ -80,13 +73,28 @@ export const uploadEye = expressAsyncHandler(async (req, res) => {
             break;
         case fileTypes.VIDEO:
             const processedVideoname = newFilename.split('.')[0] + '_processed.' + newFilename.split('.')[1]
-            overlayedFilename = `uploads/overlayedImages/${processedVideoname}`
+            overlayedFilename = `uploads/overlayedVideos/${processedVideoname}`
             break;
         default:
             overlayedFilename = ''    
     }
 
     const overlayedFilePath = join(rootDir, overlayedFilename);
+
+    // Wait for the processed file to be created with a threshold
+    const maxWaitTime = 30000; // Maximum wait time in milliseconds (e.g., 30 seconds)
+    const pollInterval = 100; // Poll every 100ms
+    let elapsedTime = 0;
+
+    while (!existsSync(overlayedFilePath) || elapsedTime < maxWaitTime) {
+        await new Promise(resolve => setTimeout(resolve, pollInterval));
+        elapsedTime += pollInterval;
+    }
+
+    if (!existsSync(overlayedFilePath)) {
+        res.status(500).send("Processing the uploaded file timed out");
+        throw new errorHandler("Processing the uploaded file timed out");
+    }
     const contents = readFileSync(overlayedFilePath);
 
     unlinkSync(overlayedFilePath);
