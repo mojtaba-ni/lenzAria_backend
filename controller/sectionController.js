@@ -10,6 +10,7 @@ import productSectionModel from "../model/section/productSectionModel.js";
 //@ access public
 export const getAllSection = expressAsyncHandler(async (req, res) => {
     const sections = await sectionModel.find();
+    
     res.status(200).json(SuccesResponse(sections));
 })
 
@@ -22,7 +23,7 @@ export const addSection = expressAsyncHandler(async (req, res) => {
       res.status(400);
       throw new errorHandler("Please fill out all");
     }
-    const newSection = await brandModel.findOne({title})
+    const newSection = await sectionModel.findOne({title})
     if(newSection){
         res.status(400);
         throw new errorHandler("its already exist");
@@ -30,6 +31,7 @@ export const addSection = expressAsyncHandler(async (req, res) => {
     await sectionModel.create({
         title, image, category , step
     });
+   
     res.status(200).json(SuccesResponse());
  })
 
