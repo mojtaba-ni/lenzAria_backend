@@ -13,6 +13,7 @@ import { mainBannerRoutes, modelBannerRoutes, offerBannerRoutes } from "./router
 import { categoryRoutes, stepRoutes } from "./router/categoryStepRouter.js"
 import { quetionRoutes } from "./router/questionRouter.js"
 import { productSectionRoutes, sectionRoutes } from "./router/sectionRouter.js"
+import { checkPythonDependencies, installPythonDependencies } from "./pythonDependencyInstaller.js"
 
 config()
 connectDb()
@@ -20,7 +21,7 @@ const app = express()
 
 //Middleware
 app.use(cors())
-app.use(express.json({ limit: '3mb' }))
+app.use(express.json({ limit: '100mb' }))
 app.use(express.urlencoded({extended:true}))
 
 
@@ -39,7 +40,13 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/step", stepRoutes);
 app.use("/api/section", sectionRoutes);
 app.use("/api/productSection", productSectionRoutes);
+
 app.use(errorHandler);
+
+//Check and install Python dependencies if needed
+if (!checkPythonDependencies()) {
+    installPythonDependencies();
+}
 
 app.listen(process.env.PORT , () => {
     console.log("server Running");
