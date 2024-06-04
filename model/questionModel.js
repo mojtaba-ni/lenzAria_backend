@@ -10,10 +10,6 @@ const questionSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the UserName"],
     },
-    image: {
-      type: String,
-      required: [true, "Please add the UserName"],
-    },
   },
   {
     timestamps: true,
