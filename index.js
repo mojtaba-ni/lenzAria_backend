@@ -13,6 +13,7 @@ import { mainBannerRoutes, modelBannerRoutes, offerBannerRoutes } from "./router
 import { categoryRoutes, stepRoutes } from "./router/categoryStepRouter.js"
 import { quetionRoutes } from "./router/questionRouter.js"
 import { productSectionRoutes, sectionRoutes } from "./router/sectionRouter.js"
+import { mapRoutes } from "./router/mapRouter.js"
 
 config()
 connectDb()
@@ -38,7 +39,10 @@ app.use("/api/modelBanner", modelBannerRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/step", stepRoutes);
 app.use("/api/section", sectionRoutes);
+app.use("/api/question", quetionRoutes);
 app.use("/api/productSection", productSectionRoutes);
+app.use("/api/map", mapRoutes);
+app.use("/api/search", mapRoutes);
 app.use(errorHandler);
 
 app.listen(process.env.PORT , () => {
