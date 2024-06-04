@@ -2,17 +2,7 @@ import mongoose from "mongoose";
 
 export const productSchema = mongoose.Schema(
   {
-    group: {
-      id:{
-        type: String,
-        required: [true, "Please add the groupId"],
-      },
-      title:{
-        type: String,
-        required: [true, "Please add the groupTitle"],
-      }
-     
-    },
+    
     category: {
       id:{
         type: String,
@@ -74,6 +64,13 @@ export const productSchema = mongoose.Schema(
     price: {
       type: Number,
       required: [true, "Please add the price"],
+    },
+    rate: {
+      type: Number,
+      default : 0
+    },
+    lenzImage: {
+      type: String,
     },
   },
   {
