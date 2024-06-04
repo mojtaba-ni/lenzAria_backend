@@ -3,6 +3,17 @@ import  { stepSchema } from "./stepModel.js";
 
 const categorySchema = mongoose.Schema(
   {
+    group: {
+      id:{
+        type: String,
+        required: [true, "Please add the groupId"],
+      },
+      title:{
+        type: String,
+        required: [true, "Please add the groupTitle"],
+      }
+     
+    },
     title: {
       type: String,
       required: [true, "Please add the UserName"],
