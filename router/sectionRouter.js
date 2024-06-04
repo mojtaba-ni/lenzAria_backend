@@ -8,7 +8,9 @@ export const productSectionRoutes = express.Router();
 
 sectionRoutes.get("/getAll", getAllSection);
 productSectionRoutes.get("/getAll", getAllPrSection);
-productSectionRoutes.post("/add", addSection);
+
+sectionRoutes.post("/add", addSection);
 productSectionRoutes.post("/add", addPrSection);
+
 sectionRoutes.delete("/delete" , deleteSection)
 productSectionRoutes.delete("/delete" , deletePrSection)
