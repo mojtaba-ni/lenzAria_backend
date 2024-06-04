@@ -15,7 +15,7 @@ export const getAllQuestion = expressAsyncHandler(async (req, res) => {
 //@ route POST api/question/add
 //@ access public
 export const addQuestion = expressAsyncHandler(async (req, res) => {
-  const { title, description, image } = req.body;
+  const { title, description } = req.body;
   if (!title) {
     res.status(400);
     throw new errorHandler("Please fill out all");
@@ -28,7 +28,6 @@ export const addQuestion = expressAsyncHandler(async (req, res) => {
   await questionModel.create({
     title,
     description,
-    image,
   });
   res.status(200).json(SuccesResponse());
 });
@@ -38,7 +37,6 @@ export const addQuestion = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const deleteQuestion = expressAsyncHandler(async (req, res) => {
   const { questionId } = req.body;
-  console.log(req.body);
   const findQuestion = await questionModel.findOne({ _id: questionId });
   if (!questionId) {
     res.status(400);
