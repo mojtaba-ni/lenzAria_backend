@@ -22,6 +22,12 @@ export const getProductById = expressAsyncHandler(async (req, res) => {
   res.status(200).json(SuccesResponse(product));
 });
 
+export const getlenzProduct = expressAsyncHandler(async (req, res) => {
+  const product = await productModel.find();
+  const lenzProduct = product.filter((item)=> item.lenzImage != null) 
+  res.status(200).json(SuccesResponse(lenzProduct));
+});
+
 //@ desc addProduct
 //@ route POST api/product/add
 //@ access public
@@ -37,7 +43,6 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     brand,
     period,
     periodId,
-    group
   } = req.body;
   if (
     !name ||
@@ -49,8 +54,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     !category ||
     !brand ||
     !period ||
-    !periodId ||
-    !group
+    !periodId 
   ) {
     res.status(400);
     throw new errorHandler("Please fill out all");
@@ -74,7 +78,6 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
   const product = await productModel.create({
     category,
     step,
-    group,
     name,
     description,
     Specifications,
@@ -93,7 +96,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const deleteProduct = expressAsyncHandler(async (req, res) => {
   const { productId } = req.body;
-  console.log(req.body);
+ 
   const findProduct = await productModel.findOne({ _id: productId });
   if (!productId) {
     res.status(400);
@@ -161,7 +164,10 @@ export const getNewProduct = expressAsyncHandler(async (req, res) => {
   const newProduct  = []
 for (let index = product?.length - 5; index < product?.length; index++) {
   const element = product[index];
-  newProduct.push(element)
+  if(element){
+    newProduct.push(element)
+  }
+
 }
   
   res.status(200).json(SuccesResponse(newProduct));
@@ -172,7 +178,6 @@ for (let index = product?.length - 5; index < product?.length; index++) {
 //@ access public
 export const getProductByBrandId = expressAsyncHandler(async (req, res) => {
   const { brandId} = req.query;
-  console.log({brandId});
   const product = await productModel.find({ "brand.id": brandId });
   res.status(200).json(SuccesResponse(product));
 });
@@ -182,7 +187,6 @@ export const getProductByBrandId = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const getProductByPeriodId = expressAsyncHandler(async (req, res) => {
   const { periodId} = req.query;
-  console.log({periodId});
   const product = await productModel.find({ periodId: periodId });
   res.status(200).json(SuccesResponse(product));
 });
@@ -193,9 +197,12 @@ export const getProductByPeriodId = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const getProductBySearch = expressAsyncHandler(async (req, res) => {
   const { name} = req.query;
-  console.log({name});
-  const product = await productModel.find();
-  const SearchPr = product.some(name)
-  console.log({SearchPr});
-  res.status(200).json(SuccesResponse(product));
+   
+  const product = await productModel.find({ name: name });
+   
+    res.status(200).json(SuccesResponse(product));
+
+ 
+  
+
 });
