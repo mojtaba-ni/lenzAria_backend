@@ -7,9 +7,17 @@ const mapSchema = mongoose.Schema(
       required: [true, "Please add the titleAddress"],
     },
     description: {
-        type: String,
-        required: [true, "Please add the descriptionAddress"],
-      },
+      type: String,
+      required: [true, "Please add the descriptionAddress"],
+    },
+    longitude: {
+      type: String,
+      required: [true, "Please add the titleAddress"],
+    },
+    latitude: {
+      type: String,
+      required: [true, "Please add the titleAddress"],
+    },
   },
   {
     timestamps: true,
