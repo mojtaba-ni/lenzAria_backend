@@ -5,7 +5,8 @@ import { join, dirname, resolve } from 'node:path';
 import userModel from "../model/userModel.js";
 import { SuccesResponse } from "../config/response.js";
 import { ScriptExecuter } from "../public/scriptExecuter.js";
-import { fileTypeChecker, fileTypes } from "../public/filetypeChecker.js";
+import { fileTypeChecker, fileTypeCheckerFromBase64, fileTypes, getProcessedFileType } from "../public/filetypeChecker.js";
+import { getBase64Header, getFileAndTypeOfBase64String } from "../public/base64FileUtils.js";
 
 //@ desc getAllUser
 //@ route GET api/user/all
@@ -23,16 +24,23 @@ export const getAllUsers = expressAsyncHandler(async (req, res) => {
 })
 
 export const uploadEye = expressAsyncHandler(async (req, res) => {
-    const { uploadedFile, filename, lenzFile, lenzFilename } = req.body;
+    const { uploadedFileBase64, lenzFileBase64 } = req.body;
+
+    // get file type
+    const uploadedFileBase64Header = getBase64Header(uploadedFileBase64);
+    const [uploadedFile, uploadedFileTypeAsString] = getFileAndTypeOfBase64String(uploadedFileBase64);
+    const [lenzFile, lenzFileTypeAsString] = getFileAndTypeOfBase64String(lenzFileBase64);
+
+    const filename = `${Date.now()}.${uploadedFileTypeAsString}`
+    const lenzFilename = `${Date.now()}.${lenzFileTypeAsString}`
 
     // upload file
     const uploadedFileBuffer = Buffer.from(uploadedFile, 'base64');
-    const uploadedFileType = fileTypeChecker(uploadedFileBuffer);
+    const fileType = fileTypeCheckerFromBase64(uploadedFileBase64);
 
-    const newFilename = `${Date.now()}-${filename}`;
     const rootDir = process.cwd(); // Root directory of the project
     const uploadsDir = join(rootDir, 'uploads');
-    const filePath = join(uploadsDir, newFilename);
+    const filePath = join(uploadsDir, filename);
 
     if (!existsSync(uploadsDir)) {
         mkdirSync(uploadsDir);
@@ -41,54 +49,31 @@ export const uploadEye = expressAsyncHandler(async (req, res) => {
 
     // upload lenz file
     const uploadedLenzBuffer = Buffer.from(lenzFile, 'base64');
-    const uploadedLenzType = fileTypeChecker(uploadedLenzBuffer);
+    const uploadedLenzType = fileTypeCheckerFromBase64(lenzFileBase64);
 
     if (uploadedLenzType != fileTypes.IMG) {
         res.status(400).send("Lenz file is not an image");
         throw new errorHandler("Lenz file is not an image");
     }
 
-    const lenzDir = join(uploadsDir, 'lenz');
-    const lenzFilePath = join(lenzDir, lenzFilename);
-
-    if (!existsSync(lenzDir)) {
-        mkdirSync(lenzDir);
-    }
+    const lenzFilePath = join(uploadsDir, lenzFilename);
     writeFileSync(lenzFilePath, uploadedLenzBuffer);
 
     const executer = new ScriptExecuter();
 
-    let result = await executer.executeProcessScript(filePath, lenzFilePath);
+    await executer.executeProcessScript(filePath, lenzFilePath);
 
-    if (!result) {
-        //res.status(400).send("Could not process the uploaded file");
-        //throw new errorHandler("Could not process the uploaded file");
-    }
-
-    let overlayedFilename = '';
-    switch(uploadedFileType) {
-        case fileTypes.IMG:
-            const processedImagename = newFilename.split('.')[0] + '_processed.png'
-            overlayedFilename = `uploads/overlayedImages/${processedImagename}`
-            break;
-        case fileTypes.VIDEO:
-            const processedVideoname = newFilename.split('.')[0] + '_processed.' + newFilename.split('.')[1]
-            overlayedFilename = `uploads/overlayedVideos/${processedVideoname}`
-            break;
-        default:
-            overlayedFilename = ''    
-    }
-
-    const overlayedFilePath = join(rootDir, overlayedFilename);
+    let overlayedFilename = filename.split('.')[0] + '_processed.' + getProcessedFileType(fileType);
+    const overlayedFilePath = join(uploadsDir, overlayedFilename);
 
     // Wait for the processed file to be created with a threshold
-    const maxWaitTime = 30000; // Maximum wait time in milliseconds (e.g., 30 seconds)
+    const maxAttempts = 30; // Maximum wait time in milliseconds (e.g., 10 seconds)
     const pollInterval = 100; // Poll every 100ms
-    let elapsedTime = 0;
+    let attempts = 0;
 
-    while (!existsSync(overlayedFilePath) || elapsedTime < maxWaitTime) {
-        await new Promise(resolve => setTimeout(resolve, pollInterval));
-        elapsedTime += pollInterval;
+    while (!existsSync(overlayedFilePath) || attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        attempts++;
     }
 
     if (!existsSync(overlayedFilePath)) {
@@ -101,5 +86,5 @@ export const uploadEye = expressAsyncHandler(async (req, res) => {
     unlinkSync(lenzFilePath);
     unlinkSync(filePath);
 
-    res.status(200).send(contents.toString('base64'));
+    res.status(200).send(uploadedFileBase64Header + ',' + contents.toString('base64'));
 })

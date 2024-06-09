@@ -113,10 +113,6 @@ export function installPythonDependencies() {
 
     const pipInstall = spawn('pip', ['install', '-r', requirementsFilePath]);
 
-    pipInstall.stdout.on('data', (data) => {
-        console.log(data);
-    });
-
     pipInstall.stderr.on('data', (data) => {
         console.error(`error: ${data}`);
     });

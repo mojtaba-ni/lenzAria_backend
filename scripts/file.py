@@ -38,8 +38,7 @@ else:
     sys.exit()
 
 # Check if uploads/overlayedImages exist, if not create them
-os.makedirs('uploads/overlayedImages', exist_ok=True) 
-os.makedirs('uploads/overlayedVideos', exist_ok=True) 
+os.makedirs('uploads', exist_ok=True) 
 
 # Get the base name of the input file
 if os.path.exists(os.path.abspath(args.InputFile)):
@@ -56,7 +55,7 @@ if os.path.abspath(args.InputFile).lower().endswith(('.png', '.jpg', '.jpeg')):
                                       mp_face_mesh,float(args.MinDetectionConfidence), float(args.MinTrackingConfidence)
                                       ,float(args.Alpha))  # Assuming process_frame is a function that processes a single frame
         processed_img = cv.cvtColor(processed_img, cv.COLOR_RGBA2BGR)
-        overlayedImagePathName = f'uploads/overlayedImages/{base_name}_processed.png'
+        overlayedImagePathName = f'uploads/{base_name}_processed.png'
         cv.imwrite(overlayedImagePathName, processed_img)  # Save as .png by default
         print(overlayedImagePathName)
     else:
@@ -73,7 +72,7 @@ elif args.InputFile.lower().endswith(('.mp4')):
         ret, frame = cap.read()
         height, width, _ = frame.shape
         fourcc = cv.VideoWriter_fourcc(*'mp4v' if args.OutputFormat == 'mp4' else 'MJPG')
-        overlayedVideoPathName = f'uploads/overlayedVideos/{base_name}_processed.{args.OutputFormat}'
+        overlayedVideoPathName = f'uploads/{base_name}_processed.{args.OutputFormat}'
         out = cv.VideoWriter(overlayedVideoPathName, fourcc, fps, (width, height))  
         while(cap.isOpened()):
             ret, frame = cap.read()
