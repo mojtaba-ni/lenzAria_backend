@@ -198,8 +198,8 @@ export const getProductByPeriodId = expressAsyncHandler(async (req, res) => {
 export const getProductBySearch = expressAsyncHandler(async (req, res) => {
   const { name} = req.query;
    
-  const product = await productModel.find({ name: name });
-   
+  const product = await productModel.find({ "name": { $regex: ".*"+name+".*"}  });
+    console.log({product});
     res.status(200).json(SuccesResponse(product));
 
  
