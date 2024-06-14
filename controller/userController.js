@@ -5,7 +5,7 @@ import { join, dirname, resolve } from 'node:path';
 import userModel from "../model/userModel.js";
 import { SuccesResponse } from "../config/response.js";
 import { ScriptExecuter } from "../public/scriptExecuter.js";
-import { fileTypeChecker, fileTypeCheckerFromBase64, fileTypes, getProcessedFileType } from "../public/filetypeChecker.js";
+import { fileTypeChecker, fileTypeCheckerFromBase64, fileTypes, getProcessedFileType } from "../public/fileTypeChecker.js";
 import { getBase64Header, getFileAndTypeOfBase64String } from "../public/base64FileUtils.js";
 
 //@ desc getAllUser
