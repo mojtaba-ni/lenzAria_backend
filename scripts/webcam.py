@@ -35,8 +35,8 @@ RIGHT_EYE = [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 
 LEFT_IRIS = [474,475, 476, 477]
 RIGHT_IRIS = [469, 470, 471, 472]
 
-# Check if uploads/overlayedImages exist, if not create them
-os.makedirs('uploads/overlayedImages', exist_ok=True) 
+# Check if uploads exist, if not create them
+os.makedirs('uploads', exist_ok=True) 
 
 # Load overlay image
 if os.path.exists(args.OverlayPath):

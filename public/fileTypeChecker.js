@@ -7,6 +7,47 @@ export const fileTypes = {
     UNKNOWN: 10
 }
 
+export const fileTypeCheckerFromBase64 = (base64) => {
+    const type = base64.split(';')[0].split('/')[1];
+    let result;
+    switch(type) {
+        case 'png':
+        case 'jpeg':
+        case 'jpg':
+            result = fileTypes.IMG
+            break;
+        case 'pdf':
+            result = fileTypes.PDF
+            break;
+        case 'xls':
+        case 'xlsx':
+            result = fileTypes.XLS
+            break;
+        case 'mp4':
+        case 'avi':
+            result = fileTypes.VIDEO
+            break;
+        default:
+            result = fileTypes.UNKNOWN
+    }
+    return result;
+}
+
+export const getProcessedFileType = (type) => {
+    let result = '';
+    switch(type) {
+        case fileTypes.IMG:
+            result = 'png'
+            break;
+        case fileTypes.VIDEO:
+            result = 'mp4'
+            break;
+        default:
+            result = 'png'
+    }
+    return result;
+}
+
 export const fileTypeChecker = (file) => {
     const arr = (new Uint8Array(file)).subarray(0, 4)
     let header = ''
