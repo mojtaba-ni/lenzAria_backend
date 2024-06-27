@@ -61,7 +61,11 @@ export const uploadEye = expressAsyncHandler(async (req, res) => {
 
     const executer = new ScriptExecuter();
 
-    await executer.executeProcessScript(filePath, lenzFilePath);
+    try {
+        await executer.executeProcessScript(filePath, lenzFilePath);
+    } catch (e) {
+        res.status(500).send("Could not process the file");
+    }
 
     let overlayedFilename = filename.split('.')[0] + '_processed.' + getProcessedFileType(fileType);
     const overlayedFilePath = join(uploadsDir, overlayedFilename);

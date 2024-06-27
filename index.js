@@ -48,9 +48,9 @@ app.use("/api/captcha", loginCaptchaRoutes);
 app.use(errorHandler);
 
 //Check and install Python dependencies if needed
-if (!checkPythonDependencies()) {
-    installPythonDependencies();
-}
+// if (!checkPythonDependencies()) {
+//     installPythonDependencies();
+// }
 
 app.listen(process.env.PORT , () => {
     console.log("server Running");

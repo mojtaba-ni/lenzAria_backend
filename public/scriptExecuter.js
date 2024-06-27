@@ -12,7 +12,7 @@ export class ScriptExecuter {
 
     executeProcessScript(inputFile, overlayPath) {
         return new Promise((resolve, reject) => {
-            const ls = spawn('python', [this.#processScript, `--OverlayPath=${overlayPath}`, `--InputFile=${inputFile}`]);
+            const ls = spawn('python3', [this.#processScript, `--OverlayPath=${overlayPath}`, `--InputFile=${inputFile}`]);
 
             let stdoutData = '';
             let stderrData = '';
@@ -41,7 +41,7 @@ export class ScriptExecuter {
 
     executeWebcamScript(cameraID, overlayPath) {
         return new Promise((resolve, reject) => {
-            const ls = spawn('python', [this.#webcamScript, `OverlayPath=${overlayPath}`, `CameraId=${cameraID}`]);
+            const ls = spawn('python3', [this.#webcamScript, `OverlayPath=${overlayPath}`, `CameraId=${cameraID}`]);
 
             let stdoutData = '';
             let stderrData = '';
