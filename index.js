@@ -2,7 +2,7 @@ import express from "express"
 import {config} from "dotenv"
 import connectDb from "./config/dbConnection.js"
 import cors from "cors"
-import { loginRoutes } from "./router/loginRouter.js"
+import { loginCaptchaRoutes, loginRoutes } from "./router/loginRouter.js"
 import errorHandler from "./middleware/errorHandler.js"
 import { usersRoutes } from "./router/userRouter.js"
 import { blogRoutes } from "./router/blogRouter.js"
@@ -44,6 +44,7 @@ app.use("/api/question", quetionRoutes);
 app.use("/api/productSection", productSectionRoutes);
 app.use("/api/map", mapRoutes);
 app.use("/api/search", mapRoutes);
+app.use("/api/captcha", loginCaptchaRoutes);
 app.use(errorHandler);
 
 //Check and install Python dependencies if needed
