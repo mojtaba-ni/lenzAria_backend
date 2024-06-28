@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema(
     },
     phoneNumber: {
         type: String,
-        required: [true, "Please add the UserName"],
+        required: [true, "Please add the phoneNumber"],
       },
     password: {
       type: String,

@@ -1,7 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import errorHandler from "../middleware/errorHandler.js";
 import userModel from "../model/userModel.js";
-import verify from "hcaptcha";
+import {verify} from "hcaptcha";
 import * as bcrypt from "bcrypt";
 import { SuccesResponse } from "../config/response.js";
 
@@ -70,21 +70,43 @@ export const registerUser = expressAsyncHandler(async (req, res) => {
 //@desc Login user
 //@route POST  /api/user/login
 //@access public
-export const loginUser = (req, res) => {
-  const { username, password, token } = req.body;
-  if (!username || !password || !token) {
-    res.status(400);
-    throw new errorHandler("Please fill out all");
+export const loginUser = expressAsyncHandler( async(req, res) => {
+  const { phoneNumber, password, token } = req.body;
+  if (!phoneNumber || !password || !token) {
+    res.json({
+      message: "اطلاعات مورد نطر را وارد کنید",
+      statusCode: 200,
+      isSuccess: false
+    });
+    return
   }
-
-  const userAvailable = userModel.findOne({ username });
-  if (userAvailable && bcrypt.compare(password, userAvailable.password)) {
-    res.status(200).json({ username: username });
+  
+  const userAvailable = await userModel.findOne({ phoneNumber });
+ 
+  if (userAvailable && bcrypt.compare(password, userAvailable?.password)) {
+    const success =  await setCaptcha(token)
+    if(success){
+      const userDataResponse = {
+        username: userAvailable?.username,
+        phoneNumber,
+        role: "user",
+        token: token
+      }
+      res.status(200).json(SuccesResponse(userDataResponse));
+      return
+    }
+    res.status(500).json("captcha success not working right");
+    
   } else {
-    res.status(401);
-    throw new errorHandler("username or Password is Not Valid");
+    res.status(200);
+    res.json({
+       message: "شماره تلفن یا رمز عبور صحیح نمی باشد",
+       statusCode: 200,
+       isSuccess: false
+     });
+     return
   }
-};
+});
 
 export const setCaptcha = async (token) => {
   if (!token) {
