@@ -89,7 +89,7 @@ export const loginUser = expressAsyncHandler( async(req, res) => {
       const userDataResponse = {
         username: userAvailable?.username,
         phoneNumber,
-        role: "user",
+        role:userAvailable?.role,
         token: token
       }
       res.status(200).json(SuccesResponse(userDataResponse));
@@ -100,7 +100,7 @@ export const loginUser = expressAsyncHandler( async(req, res) => {
   } else {
     res.status(200);
     res.json({
-       message: "شماره تلفن یا رمز عبور صحیح نمی باشد",
+       message: "شماره تلفن یا رمز عبور صحیح نمی باشد ",
        statusCode: 200,
        isSuccess: false
      });
