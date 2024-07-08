@@ -58,6 +58,9 @@ export const productSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the image"],
     },
+    imageLenz: {
+      type: String,
+    },
     score: {
         type: Number,
     },

@@ -33,7 +33,7 @@ export const addAddress = expressAsyncHandler(async (req, res) => {
         loca.push(address)
         
     //    const data =  await userAddress.updateOne({userId} , {locations:} )
-       console.log({data});
+     
     }
     else{
         const createAddress = await userAddressModel.create({

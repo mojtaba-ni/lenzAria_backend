@@ -9,9 +9,9 @@ import { SuccesResponse } from "../config/response.js";
 //@route POST /api/register
 //@access public
 export const registerUser = expressAsyncHandler(async (req, res) => {
-  const { username, password, phoneNumber , token } = req.body;
+  const { username, password, phoneNumber  } = req.body;
 
-  if (!username || !password || !phoneNumber || !token) {
+  if (!username || !password || !phoneNumber ) {
     res.status(200);
   
     res.json({
@@ -44,9 +44,9 @@ export const registerUser = expressAsyncHandler(async (req, res) => {
     });
     return
   }
-  const success =  await setCaptcha(token)
+  
 
-  if(success){
+ 
   const hashPassword = await bcrypt.hash(password, 8);
 
   const user = await userModel.create({
@@ -59,20 +59,19 @@ export const registerUser = expressAsyncHandler(async (req, res) => {
     username: username,
     phoneNumber,
     role: "user",
-    token: token
   }
   res.status(200).json(SuccesResponse(userDataResponse));
     return
-  }
-  res.status(500).json("captcha success not working right");
+  
+ 
 });
 
 //@desc Login user
 //@route POST  /api/user/login
 //@access public
 export const loginUser = expressAsyncHandler( async(req, res) => {
-  const { phoneNumber, password, token } = req.body;
-  if (!phoneNumber || !password || !token) {
+  const { phoneNumber, password } = req.body;
+  if (!phoneNumber || !password ) {
     res.json({
       message: "اطلاعات مورد نطر را وارد کنید",
       statusCode: 200,
@@ -84,18 +83,17 @@ export const loginUser = expressAsyncHandler( async(req, res) => {
   const userAvailable = await userModel.findOne({ phoneNumber });
  
   if (userAvailable && bcrypt.compare(password, userAvailable?.password)) {
-    const success =  await setCaptcha(token)
-    if(success){
+    
+   
       const userDataResponse = {
         username: userAvailable?.username,
         phoneNumber,
         role:userAvailable?.role,
-        token: token
       }
       res.status(200).json(SuccesResponse(userDataResponse));
       return
-    }
-    res.status(500).json("captcha success not working right");
+    
+  
     
   } else {
     res.status(200);
@@ -108,18 +106,3 @@ export const loginUser = expressAsyncHandler( async(req, res) => {
   }
 });
 
-export const setCaptcha = async (token) => {
-  if (!token) {
-    return false;
-  }
-  try {
-    let { success } = await verify(process.env.HCAPTCHATOKEN, token);
-    if (success) {
-      return success;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    return false;
-  }
-};

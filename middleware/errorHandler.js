@@ -3,7 +3,7 @@ import { constans } from "../public/constans.js";
 const errorHandler = (data, req, res, ) => {
  
 
-  console.log({data});
+  
   const statusCode = res.statuseCode ? res.statusCode : 500;
   switch (statusCode) {
     case constans.NOT_FOUND:

@@ -37,7 +37,6 @@ export const addBrand = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const deleteBrand = expressAsyncHandler(async (req, res) => {
     const { brandId } = req.body;
-    console.log(req.body);
     const findBrand = await brandModel.findOne({ _id: brandId });
     if (!brandId) {
       res.status(400);
