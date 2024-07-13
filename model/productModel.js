@@ -74,6 +74,7 @@ export const productSchema = mongoose.Schema(
     },
     lenzImage: {
       type: String,
+      default : null
     },
   },
   {

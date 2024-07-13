@@ -38,6 +38,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     Specifications,
     price,
     image,
+    lenzImage,
     step,
     category,
     brand,
@@ -86,6 +87,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     brand,
     period,
     periodId,
+    lenzImage: lenzImage&& lenzImage
   });
   // console.log({product});
   res.status(200).json(SuccesResponse(product));
@@ -124,6 +126,7 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
     Specifications,
     price,
     image,
+    imageLenz,
     period,
     periodId,
     brand,
@@ -147,6 +150,7 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
       Specifications,
       price,
       image,
+      imageLenz,
       period,
       periodId,
       brand,

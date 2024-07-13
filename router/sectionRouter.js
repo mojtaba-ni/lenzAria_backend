@@ -1,5 +1,4 @@
 import express from "express";
-import { addQuestion, deleteQuestion, getAllQuestion } from "../controller/questionController.js";
 import { addPrSection, addSection, deletePrSection, deleteSection, getAllPrSection, getAllSection } from "../controller/sectionController.js";
 
 
