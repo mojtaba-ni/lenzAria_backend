@@ -15,6 +15,7 @@ import { quetionRoutes } from "./router/questionRouter.js"
 import { productSectionRoutes, sectionRoutes } from "./router/sectionRouter.js"
 import { mapRoutes } from "./router/mapRouter.js"
 import { checkPythonDependencies, installPythonDependencies } from "./pythonDependencyInstaller.js"
+import { commentRoutes } from "./router/commentRouter.js"
 
 config()
 connectDb()
@@ -44,6 +45,7 @@ app.use("/api/question", quetionRoutes);
 app.use("/api/productSection", productSectionRoutes);
 app.use("/api/map", mapRoutes);
 app.use("/api/search", mapRoutes);
+app.use("/api/comment", commentRoutes);
 app.use("/api/captcha", loginCaptchaRoutes);
 app.use(errorHandler);
 

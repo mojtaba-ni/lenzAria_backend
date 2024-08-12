@@ -24,7 +24,7 @@ export const getProductById = expressAsyncHandler(async (req, res) => {
 
 export const getlenzProduct = expressAsyncHandler(async (req, res) => {
   const product = await productModel.find();
-  const lenzProduct = product.filter((item)=> item.lenzImage != null) 
+  const lenzProduct = product.filter((item) => item.lenzImage != null);
   res.status(200).json(SuccesResponse(lenzProduct));
 });
 
@@ -55,7 +55,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     !category ||
     !brand ||
     !period ||
-    !periodId 
+    !periodId
   ) {
     res.status(400);
     throw new errorHandler("Please fill out all");
@@ -87,7 +87,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     brand,
     period,
     periodId,
-    lenzImage: lenzImage&& lenzImage
+    lenzImage: lenzImage && lenzImage,
   });
   // console.log({product});
   res.status(200).json(SuccesResponse(product));
@@ -98,7 +98,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const deleteProduct = expressAsyncHandler(async (req, res) => {
   const { productId } = req.body;
- 
+
   const findProduct = await productModel.findOne({ _id: productId });
   if (!productId) {
     res.status(400);
@@ -165,15 +165,14 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
 //@ access public
 export const getNewProduct = expressAsyncHandler(async (req, res) => {
   const product = await productModel.find();
-  const newProduct  = []
-for (let index = product?.length - 5; index < product?.length; index++) {
-  const element = product[index];
-  if(element){
-    newProduct.push(element)
+  const newProduct = [];
+  for (let index = product?.length - 5; index < product?.length; index++) {
+    const element = product[index];
+    if (element) {
+      newProduct.push(element);
+    }
   }
 
-}
-  
   res.status(200).json(SuccesResponse(newProduct));
 });
 
@@ -181,7 +180,7 @@ for (let index = product?.length - 5; index < product?.length; index++) {
 //@ route GET api/product/getProductByBrandId
 //@ access public
 export const getProductByBrandId = expressAsyncHandler(async (req, res) => {
-  const { brandId} = req.query;
+  const { brandId } = req.query;
   const product = await productModel.find({ "brand.id": brandId });
   res.status(200).json(SuccesResponse(product));
 });
@@ -190,23 +189,19 @@ export const getProductByBrandId = expressAsyncHandler(async (req, res) => {
 //@ route GET api/product/getProductByPeriodId
 //@ access public
 export const getProductByPeriodId = expressAsyncHandler(async (req, res) => {
-  const { periodId} = req.query;
+  const { periodId } = req.query;
   const product = await productModel.find({ periodId: periodId });
   res.status(200).json(SuccesResponse(product));
 });
-
 
 //@ desc getProductBySearch
 //@ route GET api/product/search
 //@ access public
 export const getProductBySearch = expressAsyncHandler(async (req, res) => {
-  const { name} = req.query;
-   
-  const product = await productModel.find({ "name": { $regex: ".*"+name+".*"}  });
-    console.log({product});
-    res.status(200).json(SuccesResponse(product));
+  const { name } = req.query;
 
- 
-  
-
+  const product = await productModel.find({
+    name: { $regex: ".*" + name + ".*" },
+  });
+  res.status(200).json(SuccesResponse(product));
 });
