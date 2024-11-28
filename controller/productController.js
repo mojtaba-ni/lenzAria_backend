@@ -21,8 +21,7 @@ export const getProductById = expressAsyncHandler(async (req, res) => {
 });
 
 export const getlenzProduct = expressAsyncHandler(async (req, res) => {
-  const product = await productModel.find();
-  const lenzProduct = product.filter((item) => item.lenzImage != null);
+  const lenzProduct = await productModel.find({ lenzImage: { $ne: null } });
   res.status(200).json(SuccesResponse(lenzProduct));
 });
 
