@@ -2,37 +2,35 @@ import mongoose from "mongoose";
 
 export const productSchema = mongoose.Schema(
   {
-    
     category: {
-      id:{
+      id: {
         type: String,
         required: [true, "Please add the categoryId"],
       },
-      title:{
+      title: {
         type: String,
         required: [true, "Please add the categoryTitle"],
-      }
-     
+      },
     },
     step: {
-      id:{
+      id: {
         type: String,
         required: [true, "Please add the step"],
       },
-      title:{
+      title: {
         type: String,
         required: [true, "Please add the stepTitle"],
-      }
+      },
     },
-    brand:{
-      id:{
+    brand: {
+      id: {
         type: String,
         required: [true, "Please add the id"],
       },
-      title:{
+      title: {
         type: String,
         required: [true, "Please add the title"],
-      }
+      },
     },
     name: {
       type: String,
@@ -56,13 +54,9 @@ export const productSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      required: [true, "Please add the image"],
-    },
-    imageLenz: {
-      type: String,
     },
     score: {
-        type: Number,
+      type: Number,
     },
     price: {
       type: Number,
@@ -70,11 +64,11 @@ export const productSchema = mongoose.Schema(
     },
     rate: {
       type: Number,
-      default : 0
+      default: 0,
     },
     lenzImage: {
       type: String,
-      default : null
+      default: null,
     },
   },
   {
