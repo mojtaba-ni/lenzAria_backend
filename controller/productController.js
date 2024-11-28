@@ -1,15 +1,13 @@
 import expressAsyncHandler from "express-async-handler";
 import errorHandler from "../middleware/errorHandler.js";
-import blogModel from "../model/blogModel.js";
 import { SuccesResponse } from "../config/response.js";
 import productModel from "../model/productModel.js";
-import categoryModel from "../model/categoryModel.js";
 
 //@ desc getAllProduct
 //@ route GET api/product/getAllProduct
 //@ access public
 export const getAllProduct = expressAsyncHandler(async (req, res) => {
-  const products = await productModel.find();
+  const products = await productModel.find().sort({ createdAt: -1 });
   res.status(200).json(SuccesResponse(products));
 });
 
@@ -50,7 +48,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     !description ||
     !Specifications ||
     !price ||
-    !image ||
+    !(image || lenzImage) ||
     !step ||
     !category ||
     !brand ||
@@ -60,22 +58,6 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     res.status(400);
     throw new errorHandler("Please fill out all");
   }
-  // const findCategory = await categoryModel.findOne({ _id: categoryId });
-  // const categorySteps = findCategory.step;
-  // const theStep = categorySteps.filter((item) => item._id == "662371d692386afba8968d28");
-  // console.log({categorySteps});
-  // console.log({theStep});
-  // theStep?.product?.push({
-  //   categoryId,
-  //   stepId,
-  //   name,
-  //   description,
-  //   Specifications,
-  //   price,
-  //   image,
-  // })
-  // await categoryModel.save()
-  // updateCategory = await categoryModel.updateOne({ _id: categoryId });
   const product = await productModel.create({
     category,
     step,
@@ -126,7 +108,7 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
     Specifications,
     price,
     image,
-    imageLenz,
+    lenzImage,
     period,
     periodId,
     brand,
@@ -150,7 +132,7 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
       Specifications,
       price,
       image,
-      imageLenz,
+      lenzImage,
       period,
       periodId,
       brand,
