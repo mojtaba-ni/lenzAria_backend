@@ -13,8 +13,8 @@ RUN npm install
 # Copy the rest of the application code, including the "uploads" folder
 COPY . .
 
-# Use the latest Python runtime as a parent image
-FROM python:latest
+# Use the 3.12.3 Python runtime as a parent image
+FROM python:3.12.3
 
 # Install Node.js and npm
 RUN apt-get update && \
