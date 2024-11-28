@@ -1,9 +1,6 @@
 import { constans } from "../public/constans.js";
 
-const errorHandler = (data, req, res, ) => {
- 
-
-  
+const errorHandler = (data, req, res) => {
   const statusCode = res.statuseCode ? res.statusCode : 500;
   switch (statusCode) {
     case constans.NOT_FOUND:
@@ -35,7 +32,7 @@ const errorHandler = (data, req, res, ) => {
       });
       break;
     default:
-        console.log("No Error, All good");
+      console.log("No Error, All good");
       break;
   }
 };
