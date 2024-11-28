@@ -79,7 +79,7 @@ export const uploadEye = expressAsyncHandler(async (req, res) => {
   const calculateWaitTime = (fileSize) => {
     // Example: wait time in milliseconds based on file size (in bytes)
     // Adjust the multiplier as needed
-    return Math.max(1000, fileSize / 1024); // Wait 1 second for every 10 KB
+    return Math.max(1000, fileSize / 512);
   };
 
   const waitTime = calculateWaitTime(uploadedFileSize);
