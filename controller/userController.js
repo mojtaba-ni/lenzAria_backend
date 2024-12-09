@@ -67,7 +67,7 @@ export const uploadEye = expressAsyncHandler(async (req, res) => {
 
   const lenzFilePath = join(uploadsDir, lenzFilename);
 
-  Promise.all([
+  await Promise.all([
     writeFile(filePath, uploadedFileBuffer),
     writeFile(lenzFilePath, uploadedLenzBuffer),
   ]);
@@ -79,7 +79,7 @@ export const uploadEye = expressAsyncHandler(async (req, res) => {
   const calculateWaitTime = (fileSize) => {
     // Example: wait time in milliseconds based on file size (in bytes)
     // Adjust the multiplier as needed
-    return Math.max(1000, fileSize / 512);
+    return Math.max(1000, fileSize / 300); // Wait 1 second for every 10 KB
   };
 
   const waitTime = calculateWaitTime(uploadedFileSize);
@@ -104,10 +104,10 @@ export const uploadEye = expressAsyncHandler(async (req, res) => {
   const pollInterval = 200; // Poll every 100ms
   let attempts = 0;
 
-  while (!existsSync(overlayedFilePath) && attempts < maxAttempts) {
-    await new Promise((resolve) => setTimeout(resolve, pollInterval));
-    attempts++;
-  }
+  // while (!existsSync(overlayedFilePath) && attempts < maxAttempts) {
+  //   await new Promise((resolve) => setTimeout(resolve, pollInterval));
+  //   attempts++;
+  // }
 
   if (!existsSync(overlayedFilePath)) {
     res.status(500).send("Processing the uploaded file timed out");

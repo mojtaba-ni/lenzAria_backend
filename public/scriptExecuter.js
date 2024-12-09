@@ -40,8 +40,6 @@ export class ScriptExecuter {
           );
         }
       });
-
-      resolve(stdoutData);
     });
   }
 
