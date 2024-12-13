@@ -6,7 +6,7 @@ import transactionModel from "../model/transactionModel.js";
 import userModel from "../model/userModel.js";
 
 config();
-let zarinpal = new ZarinpalPayment(process.env.MERCHANT, false, true);
+let zarinpal = new ZarinpalPayment(process.env.MERCHANT);
 
 export const createTransaction = expressAsyncHandler(async (req, res) => {
   const { phoneNumber, amount } = req.body;
