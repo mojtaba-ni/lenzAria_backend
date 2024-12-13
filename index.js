@@ -1,32 +1,34 @@
-import express from "express"
-import {config} from "dotenv"
-import connectDb from "./config/dbConnection.js"
-import cors from "cors"
-import { loginCaptchaRoutes, loginRoutes } from "./router/loginRouter.js"
-import errorHandler from "./middleware/errorHandler.js"
-import { usersRoutes } from "./router/userRouter.js"
-import { blogRoutes } from "./router/blogRouter.js"
-import { UserAddressRoutes } from "./router/userAddressRouter.js"
-import { brandRoutes } from "./router/brandRouter.js"
-import { productRoutes } from "./router/productRouter.js"
-import { mainBannerRoutes, modelBannerRoutes, offerBannerRoutes } from "./router/bannerRouter.js"
-import { categoryRoutes, stepRoutes } from "./router/categoryStepRouter.js"
-import { quetionRoutes } from "./router/questionRouter.js"
-import { productSectionRoutes, sectionRoutes } from "./router/sectionRouter.js"
-import { mapRoutes } from "./router/mapRouter.js"
-import { checkPythonDependencies, installPythonDependencies } from "./pythonDependencyInstaller.js"
-import { commentRoutes } from "./router/commentRouter.js"
+import express from "express";
+import { config } from "dotenv";
+import connectDb from "./config/dbConnection.js";
+import cors from "cors";
+import { loginCaptchaRoutes, loginRoutes } from "./router/loginRouter.js";
+import errorHandler from "./middleware/errorHandler.js";
+import { usersRoutes } from "./router/userRouter.js";
+import { blogRoutes } from "./router/blogRouter.js";
+import { UserAddressRoutes } from "./router/userAddressRouter.js";
+import { brandRoutes } from "./router/brandRouter.js";
+import { productRoutes } from "./router/productRouter.js";
+import {
+  mainBannerRoutes,
+  modelBannerRoutes,
+  offerBannerRoutes,
+} from "./router/bannerRouter.js";
+import { categoryRoutes, stepRoutes } from "./router/categoryStepRouter.js";
+import { quetionRoutes } from "./router/questionRouter.js";
+import { productSectionRoutes, sectionRoutes } from "./router/sectionRouter.js";
+import { mapRoutes } from "./router/mapRouter.js";
+import { commentRoutes } from "./router/commentRouter.js";
+import { transactionRoutes } from "./router/transactionRouter.js";
 
-config()
-connectDb()
-const app = express()
+config();
+connectDb();
+const app = express();
 
 //Middleware
-app.use(cors())
-app.use(express.json({ limit: '100mb' }))
-app.use(express.urlencoded({extended:true}))
-
-
+app.use(cors());
+app.use(express.json({ limit: "100mb" }));
+app.use(express.urlencoded({ extended: true }));
 
 //Routes
 app.use("/api/register", loginRoutes);
@@ -47,13 +49,9 @@ app.use("/api/map", mapRoutes);
 app.use("/api/search", mapRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/captcha", loginCaptchaRoutes);
+app.use("/api/transaction", transactionRoutes);
 app.use(errorHandler);
 
-//Check and install Python dependencies if needed
-// if (!checkPythonDependencies()) {
-//     installPythonDependencies();
-// }
-
-app.listen(process.env.PORT , () => {
-    console.log("server Running");
-})
+app.listen(process.env.PORT, () => {
+  console.log("server Running");
+});

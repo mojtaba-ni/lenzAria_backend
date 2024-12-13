@@ -20,6 +20,7 @@
     "hcaptcha": "^0.1.1",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "zarinpal-pay": "^1.0.3"
   }
 }
