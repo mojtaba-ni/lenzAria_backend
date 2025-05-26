@@ -50,3 +50,27 @@ export const deleteQuestion = expressAsyncHandler(async (req, res) => {
   res.status(200).send(SuccesResponse());
   return;
 });
+
+//@ desc editQuestion
+//@ route PUT api/question/edit
+//@ access public
+export const editQuestion = expressAsyncHandler(async (req, res) => {
+  const { questionId, title, description } = req.body;
+
+  if (!questionId) {
+    res.status(400);
+    res
+      .status(200)
+      .send({ isSuccess: false, message: "لطفا آیدی سوال را وارد کنید" });
+  }
+  const findQuestion = await questionModel.findOne({ _id: questionId });
+  if (!findQuestion) {
+    res.status(404);
+    res
+      .status(200)
+      .send({ isSuccess: false, message: "سوالی با این آیدی یافت نشد" });
+  }
+  await questionModel.updateOne({ _id: questionId }, { title, description });
+  res.status(200).send(SuccesResponse());
+  return;
+});
