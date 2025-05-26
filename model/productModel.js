@@ -38,11 +38,9 @@ export const productSchema = mongoose.Schema(
     },
     period: {
       type: String,
-      required: [true, "Please add the period"],
     },
     periodId: {
       type: Number,
-      required: [true, "Please add the periodId"],
     },
     description: {
       type: String,
