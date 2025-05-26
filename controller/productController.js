@@ -50,9 +50,7 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     !(image || lenzImage) ||
     !step ||
     !category ||
-    !brand ||
-    !period ||
-    !periodId
+    !brand
   ) {
     res.status(400);
     throw new errorHandler("Please fill out all");
@@ -66,8 +64,8 @@ export const addProduct = expressAsyncHandler(async (req, res) => {
     price,
     image,
     brand,
-    period,
-    periodId,
+    period: period ? period : null,
+    periodId: periodId ? periodId : null,
     lenzImage: lenzImage && lenzImage,
   });
   // console.log({product});
